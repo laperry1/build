@@ -161,6 +161,16 @@ class EdifyGenerator(object):
   def RunBackup(self, command):
     self.script.append(('run_program("/tmp/install/bin/backuptool.sh", "%s");' % command))
 
+  def FlashMagisk(self):
+    self.script.append('package_extract_dir("magisk", "/tmp/magisk");')
+    self.script.append('run_program("/sbin/busybox", "unzip", "/tmp/magisk/magisk.zip", "META-INF/com/google/android/*", "-d", "/tmp/magisk");')
+    self.script.append('run_program("/sbin/sh", "/tmp/magisk/META-INF/com/google/android/update-binary", "dummy", "1", "/tmp/magisk/magisk.zip");')
+
+  def FlashViper(self):
+    self.script.append('package_extract_dir("viper", "/tmp/viper");')
+    self.script.append('run_program("/sbin/busybox", "unzip", "/tmp/viper/viper.zip", "META-INF/com/google/android/*", "-d", "/tmp/viper");')
+    self.script.append('run_program("/sbin/sh", "/tmp/viper/META-INF/com/google/android/update-binary", "dummy", "1", "/tmp/viper/viper.zip");')
+
   def RunCleanCache(self):
     self.script.append(('run_program("/system/bin/clean_cache.sh");'))
 
